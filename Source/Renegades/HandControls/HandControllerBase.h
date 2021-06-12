@@ -24,6 +24,9 @@ public:
 	// Called every frame
 	virtual void TriggerPressed() {}
 	virtual void TriggerReleased() {}
+	virtual void GripPressed() {}
+	virtual void GripReleased() {}
+
 	void SetHand(EControllerHand Hand);
 
 

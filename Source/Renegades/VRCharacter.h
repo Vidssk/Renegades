@@ -7,6 +7,12 @@
 #include "HandControls/HandControllerBase.h"
 #include "VRCharacter.generated.h"
 
+struct Offset
+{
+	FVector Location;
+	FRotator Rotation;
+};
+
 UCLASS()
 class RENEGADES_API AVRCharacter : public ACharacter
 {
@@ -30,10 +36,36 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	FVector RotationForwardVector(FTransform Transform);
+	float GetDirection(FTransform CameraPosition);
 	void SetupHands();
 	void UpdateRootLocation();
+	void CalculateMovement();
+	Offset GetBodyOffset();
+	FRotator GetBodyRotationFromHMD();
+
+	float GetDistanceMoved(float CurrentX, float CurrentY);
+	float GetDistanceRotated(FRotator CurrentRotation);
+
 private:
 
+	//IK Rigging
+	FTransform LastCameraPosition;
+	//FTransform CurrentCameraPosition;
+	FTransform BodyTargetPosition;
+	//FTransform BodyCurrentPosition;
+
+	float MovementDirection;
+	float MovementSpeed;
+	float Alpha;
+	float DistanceRotated;
+	float DistanceMoved;
+	UPROPERTY(EditAnywhere)
+	float MovementThreshold = 1;
+	UPROPERTY(EditAnywhere)
+	float RotationThreshold = 1;
+	UPROPERTY(EditAnywhere)
+	float PlayerHeight;
 	//Configuration
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AHandControllerBase> RightHandControllerClass;
